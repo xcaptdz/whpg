@@ -58,6 +58,6 @@ ENV HOSTNAME="0.0.0.0"
 
 
 # Use the init-db.sh script as the entrypoint
-ENTRYPOINT ["/app/scripts/init-db.sh"]
+# ENTRYPOINT ["/app/scripts/init-db.sh"]
 
 CMD ["node", "server.js"]
