@@ -29,22 +29,64 @@ export async function GET() {
       const body = await request.json();
       const { hook } = body;
   
-      const newHook = await prisma.hook.create({
-        data: {
-          hook
-           
-        },
+      if (!hook || typeof hook !== 'string') {
+        return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+      }
+  
+      // Insert into PostgreSQL via Prisma
+      await prisma.hook.create({
+        data: { hook },
       });
   
-      return NextResponse.json(newHook, { status: 201 });
+      // Send POST to external backend
+      const backendResponse = await fetch(`http://10.0.20.4:8123/api/webhook/${hook}`, {
+        method: 'POST',
+      });
+  
+      const responseText = await backendResponse.text();
+  
+      return NextResponse.json({
+        message: 'Inserted and forwarded successfully',
+        backendResponse: responseText,
+      });
     } catch (error) {
-      console.error('Error creating user:', error);
-      return NextResponse.json(
-        { error: 'Failed to create user' },
-        { status: 500 }
-      );
+      console.error('Error:', error);
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+  // export async function POST(request: Request) {
+  //   try {
+  //     const body = await request.json();
+  //     const { hook } = body;
+  
+  //     const newHook = await prisma.hook.create({
+  //       data: {
+  //         hook
+           
+  //       },
+  //     });
+  
+  //     return NextResponse.json(newHook, { status: 201 });
+  //   } catch (error) {
+  //     console.error('Error creating user:', error);
+  //     return NextResponse.json(
+  //       { error: 'Failed to create user' },
+  //       { status: 500 }
+  //     );
+  //   }
+  // }
 
 
 
