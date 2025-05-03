@@ -2,13 +2,14 @@
 
 services:
   whpg:
-    image: whpg:latest
+    image: xcaptdz/whpg:latest
     container_name: whpg-app
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true      
     networks:
-      - proxy    
+      - proxy
+      - backend-whpg    
     ports:
       - '${PORT}:3000'
     environment:
