@@ -32,7 +32,14 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# Copy the initialization script
+# COPY --chmod=755 scripts/init-db.sh ./scripts/init-db.sh
+
 COPY --from=builder /app/public ./public
+
+# Copy Prisma
+COPY --from=builder /app/prisma ./prisma
+
 
 # Set the correct permission for prerender cache
 # RUN mkdir .next
@@ -48,5 +55,9 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+
+
+# Use the init-db.sh script as the entrypoint
+ENTRYPOINT ["/app/scripts/init-db.sh"]
 
 CMD ["node", "server.js"]
