@@ -5,7 +5,8 @@
 
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../../../lib/prisma';
-
+const baseUrl = process.env.WEBHOOK_BASE_URL;
+const serverApiKey = process.env.API_SECRET_KEY;
 
 
 
@@ -25,6 +26,33 @@ export async function GET() {
 
 
   export async function POST(request: Request) {
+
+    const clientApiKey = request.headers.get('x-api-key');
+
+    // Validate API key
+    if (!clientApiKey || clientApiKey !== serverApiKey) {
+
+
+      const ip = request.headers.get('x-forwarded-for') || 'Unknown IP';
+      const timestamp = new Date().toISOString();
+
+      const logMessage = `UNAUTHORIZED: ${ip} - ${timestamp} - Key: ${clientApiKey || 'None'}`;
+  
+      console.warn(logMessage);
+
+      console.warn(`[UNAUTHORIZED] ${logMessage}`);
+
+      // Insert the log into the webhook table
+      await prisma.hook.create({
+        data: { hook: logMessage },
+      });
+
+
+
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+
     try {
       const body = await request.json();
       const { hook } = body;
@@ -39,7 +67,7 @@ export async function GET() {
       });
   
       // Send POST to external backend
-      const backendResponse = await fetch(`http://10.0.20.4:8123/api/webhook/${hook}`, {
+      const backendResponse = await fetch(`${baseUrl}${hook}`, {
         method: 'POST',
       });
   
