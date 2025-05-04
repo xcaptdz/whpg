@@ -19,7 +19,7 @@ datasource db {
 model Hook {
   id        Int       @id @default(autoincrement())
   hook      String?
-  isAuth    Boolean @default(true)
+  isAuth    Boolean @default(false)
   createdAt DateTime  @default(now())
 
 }
