@@ -43,9 +43,14 @@ export async function GET() {
       console.warn(`[UNAUTHORIZED] ${logMessage}`);
 
       // Insert the log into the webhook table
-      await prisma.hook.create({
-        data: { hook: logMessage },
+      const newHook = await prisma.hook.create({
+        data: { 
+          hook: logMessage,
+          isAuth: false,
+        },
       });
+
+      console.log(newHook);
 
 
 
@@ -62,9 +67,16 @@ export async function GET() {
       }
   
       // Insert into PostgreSQL via Prisma
-      await prisma.hook.create({
-        data: { hook },
+      console.log("hello!");
+      const newHook = await prisma.hook.create({
+        data: { 
+          hook: hook,
+          isAuth: true, 
+      
+        },
       });
+
+      
   
       // Send POST to external backend
       const backendResponse = await fetch(`${baseUrl}${hook}`, {
@@ -72,6 +84,7 @@ export async function GET() {
       });
   
       const responseText = await backendResponse.text();
+       
   
       return NextResponse.json({
         message: 'Inserted and forwarded successfully',
