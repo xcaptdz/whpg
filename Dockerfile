@@ -33,7 +33,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy the initialization script
-COPY --chmod=755 scripts/init-db.sh ./scripts/init-db.sh
+# COPY --chmod=755 scripts/init-db.sh ./scripts/init-db.sh
 
 COPY --from=builder /app/public ./public
 

@@ -1,4 +1,5 @@
- 
+ # docker exec -it whpg-app  npx prisma db push
+  
 
 services:
   whpg:
@@ -9,44 +10,35 @@ services:
       - no-new-privileges:true      
     networks:
       - proxy
-      # - backend-whpg    
+      - backend   
     ports:
       - '${PORT}:3000'
     environment:
-      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@10.0.10.100:5434/db?schema=public"
+
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresdb:5432/db?schema=public"
       WEBHOOK_BASE_URL: ${WEBHOOK_BASE_URL}
 
     depends_on:
-      - pgdb
+      - postgresdb
 
 
-# docker exec -it whpg-app  scripts/init-db.sh
-
-
-
-  pgdb:
+  postgresdb:
     image: postgres:15
-    container_name: whpg-pgdb
+    container_name: whpg-postgresdb
+    security_opt:
+      - no-new-privileges:true    
     restart: always
     networks:
-      - proxy
+      - backend
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - /home/xcapt/stacks/.volumes/pgdb/data:/var/lib/postgresql/data
-
-    ports:
-      - "${POSTGRES_PORT}:5432"
-
-# volumes:
-#   whpg_app:
-
-
+      - /home/xcapt/stacks/.volumes/whpg-postgresdb/data:/var/lib/postgresql/data
 
 
 networks:
   proxy:
     external: true   
-  backend-whpg:  
+  backend:  
