@@ -37,7 +37,7 @@ export async function GET() {
       const ip = request.headers.get('x-forwarded-for') || 'Unknown IP';
       const timestamp = new Date().toISOString();
 
-      const logMessage = `UNAUTHORIZED: ${ip} - ${timestamp} - Key: ${clientApiKey || 'None'}`;
+      const logMessage = `UNAUTHORIZED: ${ip} - Key: ${clientApiKey || 'None'}`;
   
       console.warn(logMessage);
 
