@@ -1,7 +1,7 @@
 
 
 import { Hook, Prisma } from '@prisma/client'
-import { prisma } from '@/lib/prisma';
+// import { prisma } from '@/lib/prisma';
 
 type Props = {
   data: Hook[]

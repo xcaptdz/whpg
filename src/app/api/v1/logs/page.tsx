@@ -1,4 +1,5 @@
-// pages/index.tsx
+export const dynamic = 'force-dynamic';
+
 import WebhookTable from '@/components/WebhookTable'
 
 import { prisma } from '@/lib/prisma'
@@ -6,7 +7,7 @@ import { prisma } from '@/lib/prisma'
 
  
 
-export default async function HomePage() {
+export default async function Logs() {
 
   // const hooks = await prisma.hook.findMany();
 
