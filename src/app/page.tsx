@@ -2,7 +2,7 @@
 //     return <h1>Webhook API is running!</h1>;
 // }
 
-
+export const dynamic = 'force-dynamic';
 
 import Image from "next/image";
 
