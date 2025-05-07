@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
 
-import WebhookTable from '@/components/WebhookTable'
+import WebhookTable from '@/src/components/WebhookTable'
 
 import { prisma } from '@/lib/prisma'
 
