@@ -11,18 +11,18 @@ const serverApiKey = process.env.API_SECRET_KEY;
 
 
 
-export async function GET() {
-    try {
-      const hooks = await prisma.hook.findMany();
-      return NextResponse.json(hooks);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      return NextResponse.json(
-        { error: 'Internal Server Error' },
-        { status: 500 }
-      );
-    }
-  }
+// export async function GET() {
+//     try {
+//       const hooks = await prisma.hook.findMany();
+//       return NextResponse.json(hooks);
+//     } catch (error) {
+//       console.error('Error fetching users:', error);
+//       return NextResponse.json(
+//         { error: 'Internal Server Error' },
+//         { status: 500 }
+//       );
+//     }
+//   }
 
 
 export async function POST(request: Request) {
