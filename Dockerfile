@@ -55,7 +55,8 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_YW11c2VkLWJvYS04Ny5jbGVyay5hY2NvdW50cy5kZXYk
+ENV CLERK_SECRET_KEY=sk_test_Lc4bnbcWGXZiXrnghw8WWgu4EeCcPzq3JVksTBFgL1
 
 # Use the init-db.sh script as the entrypoint
 # ENTRYPOINT ["/app/scripts/init-db.sh"]
