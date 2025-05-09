@@ -1,0 +1,7 @@
+I have a nextjs app i need to add a component that generates a beautiful tailwind css table that displays a list of Hook from Prisma model Hook {
+  id        Int       @id @default(autoincrement())
+  hook      String @default("hook")
+  isAuth    Boolean @default(false)
+  createdAt DateTime  @default(now())
+
+}
