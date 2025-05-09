@@ -17,6 +17,9 @@ export async function GET(request: Request) {
    // Validate API key
     if (!clientApiKey || clientApiKey !== serverApiKey) {
 
+      console.log("Server_API_KEY",serverApiKey);
+      console.log("Provided_API_KEY",clientApiKey);
+
 
       const ip = request.headers.get('x-forwarded-for') || 'Unknown IP';
       const logMessage = `UNAUTHORIZED: ${ip} - Key: ${clientApiKey || 'None'}`;
