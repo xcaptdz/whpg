@@ -25,8 +25,7 @@ export async function GET() {
   }
 
 
-
-  export async function POST(request: Request) {
+export async function POST(request: Request) {
 
     const clientApiKey = request.headers.get('x-api-key');
 
@@ -35,30 +34,11 @@ export async function GET() {
 
 
       const ip = request.headers.get('x-forwarded-for') || 'Unknown IP';
-      const timestamp = new Date().toISOString();
-
       const logMessage = `UNAUTHORIZED: ${ip} - Key: ${clientApiKey || 'None'}`;
-  
-      console.warn(logMessage);
-
-      console.warn(`[UNAUTHORIZED] ${logMessage}`);
-
-      // Insert the log into the webhook table
-      const newHook = await prisma.hook.create({
-        data: { 
-          hook: logMessage,
-          isAuth: false,
-        },
-      });
-
-      console.log(newHook);
-
-
+      await logHook(logMessage, false);
 
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-
     try {
       const body = await request.json();
       const { hook } = body;
@@ -67,24 +47,15 @@ export async function GET() {
         return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
       }
   
-      // Insert into PostgreSQL via Prisma
-      console.log("hello!");
-      const newHook = await prisma.hook.create({
-        data: { 
-          hook: hook,
-          isAuth: true, 
-      
-        },
-      });
-      console.log(newHook);
 
-      
-  
       // Send POST to external backend
       const backendResponse = await fetch(`${baseUrl}${hook}`, {
         method: 'POST',
       });
   
+      // Insert into PostgreSQL via Prisma
+      await logHook(hook,true);
+
       const responseText = await backendResponse.text();
        
   
@@ -97,6 +68,25 @@ export async function GET() {
       return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
   }
+
+
+async function logHook(hook: string, isAuth: boolean) {
+
+ 
+      console.warn(hook);
+
+      console.warn(`[UNAUTHORIZED] ${hook}`);
+
+      // Insert the log into the webhook table
+      const newHook = await prisma.hook.create({
+        data: { 
+          hook: hook,
+          isAuth: isAuth,
+        },
+      });
+
+      console.log(newHook);
+    }
 
 
 
