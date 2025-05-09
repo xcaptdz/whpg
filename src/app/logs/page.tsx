@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import WebhookTable from '@/src/components/WebhookTable'
+import HooksTable from '@/src/components/HooksTable'
 
 import { prisma } from '@/lib/prisma'
 
@@ -20,8 +21,9 @@ export default async function Logs() {
 console.log(hooks);
   return (
     <main style={{ padding: '20px' }}>
-      <h1>Webhooks</h1>
-      <WebhookTable data={hooks} />
+      {/* <h1>Webhooks</h1> */}
+      <HooksTable data={hooks} />
+ 
     </main>
   )
 }
